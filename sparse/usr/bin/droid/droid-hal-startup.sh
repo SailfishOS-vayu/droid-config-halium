@@ -14,6 +14,13 @@ echo $NOTIFY_SOCKET > /run/droid-hal/notify-socket-name
 
 umount -l /sys/fs/cgroup/schedtune || true
 
+# mount binderfs if needed
+    if [ ! -e /dev/binder ]; then
+        mkdir -p /dev/binderfs
+        mount -t binder binder /dev/binderfs -o stats=global
+        ln -s /dev/binderfs/*binder /dev
+fi
+
 mkdir -p /dev/__properties__
 mkdir -p /dev/socket
 
